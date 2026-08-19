@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReadingComfortExt — Politique de confidentialité</title>
+  <style>
+    :root {
+      --bg: #FDF6E3;
+      --text: #2C3E50;
+      --text-muted: #5D6D7E;
+      --accent: #2E86AB;
+    }
+
+    body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    ul {
+      padding-left: 24px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    a {
+      color: var(--accent);
+      word-break: break-all;
+    }
+
+    strong {
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <h1>Politique de confidentialité</h1>
+  <p><strong>Dernière mise à jour : 2026-08-19</strong></p>
+
+  <h2>Données collectées</h2>
+  <p><strong>ReadingComfortExt ne collecte aucune donnée personnelle.</strong></p>
+  <p>
+    L'extension fonctionne entièrement dans votre navigateur. Vos préférences de confort de lecture
+    (police, espacement, fond, etc.) sont stockées localement par le navigateur via <code>chrome.storage.sync</code>.
+    Ces données :
+  </p>
+  <ul>
+    <li>ne quittent jamais votre appareil ;</li>
+    <li>ne sont transmises à aucun serveur ;</li>
+    <li>ne sont utilisées à aucune fin publicitaire ou analytique.</li>
+  </ul>
+
+  <h2>Permissions demandées</h2>
+  <p>L'extension demande les permissions suivantes pour fonctionner :</p>
+  <ul>
+    <li><code>storage</code> : pour mémoriser vos préférences localement.</li>
+    <li><code>activeTab</code> : pour appliquer les styles sur l'onglet actuellement consulté.</li>
+    <li><code>scripting</code> : pour injecter les styles CSS dans les pages web.</li>
+    <li><code>&lt;all_urls&gt;</code> : pour activer le confort de lecture sur n'importe quel site.</li>
+  </ul>
+  <p>Aucune de ces permissions n'est utilisée pour lire le contenu de vos pages à des fins tierces.</p>
+
+  <h2>Services tiers</h2>
+  <p>
+    L'extension n'utilise aucun service externe. Les polices Lexend et Atkinson Hyperlegible sont
+    chargées via Google Fonts lors de l'activation (aucun tracking côté extension). La police OpenDyslexic
+    est embarquée localement dans l'extension.
+  </p>
+
+  <h2>Modifications</h2>
+  <p>
+    Cette politique peut être mise à jour si de nouvelles fonctionnalités nécessitent un traitement différent.
+    Toute modification sera reflétée dans cette page et dans l'extension.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Pour toute question, ouvrez une issue sur le dépôt public :
+    <a href="https://github.com/OnyxynO/readingcomfortext/issues">github.com/OnyxynO/readingcomfortext/issues</a>
+  </p>
+</body>
+</html>

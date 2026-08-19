@@ -139,6 +139,11 @@ function bindEvents() {
     e.preventDefault();
     chrome.tabs.create({ url: chrome.runtime.getURL('docs/science.html') });
   });
+
+  document.getElementById('open-privacy').addEventListener('click', (e) => {
+    e.preventDefault();
+    chrome.tabs.create({ url: chrome.runtime.getURL('docs/privacy.html') });
+  });
 }
 
 /**

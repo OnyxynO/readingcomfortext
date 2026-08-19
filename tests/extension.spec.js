@@ -130,7 +130,9 @@ test.describe('ReadingComfortExt — tests visuels', () => {
   for (const site of TEST_SITES) {
     test(`rendu sur ${site.name}`, async () => {
       const page = await context.newPage();
-      await page.goto(site.url, { waitUntil: 'networkidle', timeout: 30000 });
+      await page.goto(site.url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      // Laisser un peu de temps au réseau avant la capture, sans attendre networkidle (trop strict sur certains sites).
+      await page.waitForTimeout(2000);
 
       // Capture avant.
       await page.screenshot({ path: path.join(SCREENSHOTS_DIR, `${site.name}-before.png`) });

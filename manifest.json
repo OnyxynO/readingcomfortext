@@ -45,7 +45,8 @@
     {
       "resources": [
         "fonts/*",
-        "docs/science.html"
+        "docs/science.html",
+        "docs/privacy.html"
       ],
       "matches": [
         "<all_urls>"
