@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "test:e2e": "playwright test",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "build:zip": "./scripts/build-zip.sh"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0"

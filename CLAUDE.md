@@ -9,7 +9,7 @@
 Extension navigateur (Chrome / Firefox / Edge) qui applique des options de confort de lecture sur n'importe quel site web : polices adaptées, espacement, fond crème, texte non justifié, guides visuels et TTS. Chaque option est badgée **Sci ✓** ou **Pref** pour transparence scientifique.
 
 - **Stack** : JavaScript vanilla + Manifest V3 + Web Speech API + `chrome.storage.sync`
-- **Phase actuelle** : MVP (popup + content script + stockage)
+- **Phase actuelle** : MVP packagé, prêt pour soumission stores
 - **URL prod** : à publier sur Chrome Web Store / Firefox Add-ons
 - **Repo** : `OnyxynO/readingcomfortext` (public)
 
@@ -103,15 +103,36 @@ python3 -m json.tool manifest.json
 1. ✅ Manifest V3 minimal + popup + content script
 2. ✅ Injection CSS : polices, espacement, fond crème, texte non justifié
 3. ✅ Stockage des préférences avec `chrome.storage.sync`
-4. ✅ Guides visuels (lignes colorées — MVP avec repeating-gradient)
+4. ✅ Guides visuels (lignes colorées — gradient horizontal répété par ligne)
 5. ✅ TTS via Web Speech API
 6. ✅ Page `docs/science.md` / `docs/science.html` et badges Sci ✓ / Pref
-7. ⏳ Tests sur un panel de sites représentatifs
-8. ⏳ Embarquer OpenDyslexic en local (supprimer le CDN jsDelivr)
-9. ⏳ Ajouter une privacy policy pour les stores
-10. ⏳ Publication Chrome Web Store + Firefox Add-ons
+7. ✅ Tests sur un panel de sites représentatifs (Playwright)
+8. ✅ Embarquer OpenDyslexic en local (supprimer le CDN jsDelivr)
+9. ✅ Ajouter une privacy policy pour les stores
+10. ⏳ Publication Chrome Web Store + Firefox Add-ons (comptes développeur requis)
 
 ---
+
+## Publication
+
+```bash
+# Générer l'archive pour les stores
+bun run build:zip
+# → dist/readingcomfortext.zip
+```
+
+### Chrome Web Store
+
+1. Compte développeur : https://chrome.google.com/webstore/devconsole (5 $)
+2. New item → uploader `dist/readingcomfortext.zip`
+3. Privacy policy : `docs/privacy.html` (ou URL hébergée après publication)
+4. Soumettre pour validation.
+
+### Firefox Add-ons
+
+1. Compte développeur : https://addons.mozilla.org/developers/
+2. Developer Hub → soumettre `dist/readingcomfortext.zip`
+3. Vérifier la compatibilité Manifest V3.
 
 ## Sources
 
