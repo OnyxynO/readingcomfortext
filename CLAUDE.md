@@ -95,6 +95,7 @@ python3 -m json.tool manifest.json
 - **Guide visuel MVP** : la version actuelle utilise un `repeating-linear-gradient` horizontal. Ce n'est pas encore le gradient cosinus caractère par caractère de Korben, mais c'est un premier repère visuel.
 - **Tests Playwright** : pour obtenir l'extension ID, un service worker minimal est nécessaire (`background/background.js`). Sans lui, `context.serviceWorkers()` reste vide.
 - **Taille du popup** : le popup Chrome est limité en hauteur (~600 px). Si le contenu dépasse, une scrollbar verticale apparaît — c'est le comportement attendu.
+- **Compatibilité Firefox** : Firefox MV3 exige `browser_specific_settings.gecko.id` et préfère `background.scripts` au lieu de `service_worker`. Le manifest inclut les deux propriétés pour rester compatible Chrome + Firefox.
 
 ---
 
