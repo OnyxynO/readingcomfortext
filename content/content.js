@@ -47,21 +47,35 @@ function ensureFonts() {
   link.href = 'https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap';
   document.head.appendChild(link);
 
-  // OpenDyslexic : version CDN en attendant l'embarquement local.
+  // OpenDyslexic : fichiers locaux sous SIL-OFL.
   const style = document.createElement('style');
   style.textContent = `
     @font-face {
       font-family: 'OpenDyslexic';
-      src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.0/woff/OpenDyslexic-Regular.woff2') format('woff2');
+      src: url('${chrome.runtime.getURL('fonts/OpenDyslexic/OpenDyslexic-Regular.woff')}') format('woff');
       font-weight: normal;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'OpenDyslexic';
-      src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.0/woff/OpenDyslexic-Bold.woff2') format('woff2');
+      src: url('${chrome.runtime.getURL('fonts/OpenDyslexic/OpenDyslexic-Bold.woff')}') format('woff');
       font-weight: bold;
       font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'OpenDyslexic';
+      src: url('${chrome.runtime.getURL('fonts/OpenDyslexic/OpenDyslexic-Italic.woff')}') format('woff');
+      font-weight: normal;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'OpenDyslexic';
+      src: url('${chrome.runtime.getURL('fonts/OpenDyslexic/OpenDyslexic-BoldItalic.woff')}') format('woff');
+      font-weight: bold;
+      font-style: italic;
       font-display: swap;
     }
   `;

@@ -8,12 +8,17 @@ OpenDyslexic est distribuée sous licence **SIL Open Font License (OFL) 1.1**.
 
 Site officiel : https://opendyslexic.org
 
-## Fichiers attendus
+## Fichiers embarqués
 
-Pour respecter le principe « zéro service tiers », les fichiers de police devraient être embarqués ici :
+Les fichiers suivants sont inclus dans l'extension sous `fonts/OpenDyslexic/` :
 
-- `OpenDyslexic-Regular.woff2`
-- `OpenDyslexic-Bold.woff2`
-- `OpenDyslexic-Italic.woff2`
+- `OpenDyslexic-Regular.woff`
+- `OpenDyslexic-Bold.woff`
+- `OpenDyslexic-Italic.woff`
+- `OpenDyslexic-BoldItalic.woff`
 
-Dans le MVP, la police est chargée via un CDN fiable (jsDelivr) dans `content/content.js`. Le passage à une version entièrement locale est prévu avant publication sur les stores.
+Ces fichiers proviennent du package npm `open-dyslexic@1.0.3` (WOFF, SIL-OFL).
+
+## Mentions de copyright
+
+Les mentions de copyright d'origine sont conservées dans `README-npm.md` fourni avec les fichiers de police.
