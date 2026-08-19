@@ -33,7 +33,8 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "readingcomfortext@onyxyno.github.io"
+      "id": "readingcomfortext@onyxyno.github.io",
+      "data_collection_permissions": ["none"]
     }
   },
   "content_scripts": [
