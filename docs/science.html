@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReadingComfortExt — Badges scientifiques</title>
+  <style>
+    :root {
+      --bg: #FDF6E3;
+      --text: #2C3E50;
+      --text-muted: #5D6D7E;
+      --accent: #2E86AB;
+      --badge-sci: #27AE60;
+      --badge-pref: #E67E22;
+    }
+
+    body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+
+    h3 {
+      font-size: 17px;
+      margin-top: 20px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: white;
+    }
+
+    .badge-sci {
+      background-color: var(--badge-sci);
+    }
+
+    .badge-pref {
+      background-color: var(--badge-pref);
+    }
+
+    a {
+      color: var(--accent);
+      word-break: break-all;
+    }
+
+    blockquote {
+      border-left: 4px solid var(--accent);
+      margin: 16px 0;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.5);
+      font-style: italic;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <h1>Badges scientifiques</h1>
+  <p>
+    Chaque option de <strong>ReadingComfortExt</strong> affiche un badge indiquant son niveau de justification :
+  </p>
+  <p>
+    <span class="badge badge-sci">Sci ✓</span> : soutenu par des études ou des recommandations d'accessibilité reconnues.
+  </p>
+  <p>
+    <span class="badge badge-pref">Pref</span> : préférence subjective documentée, sans consensus scientifique fort.
+  </p>
+
+  <h2>Options marquées Sci ✓</h2>
+
+  <h3>Lexend</h3>
+  <p>Police développée par la Dr. Bonnie Shaver-Troup avec des études sur la fluidité de lecture. <a href="https://www.lexend.com/">lexend.com</a></p>
+
+  <h3>Atkinson Hyperlegible</h3>
+  <p>Police créée par le Braille Institute pour les personnes malvoyantes. <a href="https://brailleinstitute.org/freefont">brailleinstitute.org/freefont</a></p>
+
+  <h3>Espacement des lettres</h3>
+  <p>Un espacement léger entre les caractères peut améliorer la reconnaissance des mots, notamment pour les lecteurs dyslexiques.</p>
+
+  <h3>Hauteur de ligne</h3>
+  <p>Une hauteur de ligne suffisante réduit la fatigue visuelle. WCAG 1.4.8 recommande au moins 1.5 fois la taille de police.</p>
+
+  <h3>Largeur de colonne</h3>
+  <p>Une ligne de 45 à 75 caractères améliore la lecture. Référence : WCAG 1.4.8 et travaux de typographie.</p>
+
+  <h3>Fond crème</h3>
+  <p>Un fond teinté réduit le contraste brut noir-sur-blanc, ce qui peut diminuer la fatigue visuelle.</p>
+
+  <h3>Texte non justifié</h3>
+  <p>Le texte justifié crée des "rivières" blanches qui gênent les lecteurs dyslexiques. Référence : WCAG 1.4.8.</p>
+
+  <h3>Lignes colorées</h3>
+  <p>Un guide visuel horizontal aide l'œil à rester sur la ligne en cours.</p>
+
+  <h2>Options marquées Pref</h2>
+
+  <h3>OpenDyslexic</h3>
+  <p>Police très populaire dans la communauté dyslexique, mais les études scientifiques sur son efficacité sont mitigées. <a href="https://opendyslexic.org/">opendyslexic.org</a></p>
+
+  <h2>Ce qui n'a pas été retenu</h2>
+
+  <h3>Bionic Reading</h3>
+  <p>Une étude de 2024 a montré que cette méthode n'améliorait ni la vitesse de lecture ni la compréhension.</p>
+  <p><a href="https://www.sciencedirect.com/science/article/pii/S0001691824001811">Lire l'étude</a></p>
+
+  <blockquote>
+    Cette page est une synthèse accessible. Elle ne remplace pas un avis médical ou orthophonique.
+  </blockquote>
+</body>
+</html>
