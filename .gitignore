@@ -11,6 +11,14 @@
 *.swo
 *~
 
+# Dépendances
+node_modules/
+package-lock.json
+
+# Playwright
+playwright-report/
+test-results/
+
 # Assets générés (si on ajoute un build plus tard)
 /dist
 /build

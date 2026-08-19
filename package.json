@@ -1,0 +1,13 @@
+{
+  "name": "readingcomfortext",
+  "version": "0.1.0",
+  "description": "Extension navigateur open source de confort de lecture pour tout le web.",
+  "private": true,
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

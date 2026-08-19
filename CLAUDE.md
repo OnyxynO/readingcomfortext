@@ -31,7 +31,11 @@ readingcomfortext/
 ├── manifest.json        # Manifest V3
 ├── README.md            # Présentation publique
 ├── CLAUDE.md            # Ce fichier
+├── package.json         # Dépendances dev (Playwright)
+├── playwright.config.js # Config tests E2E
 ├── .gitignore
+├── background/
+│   └── background.js    # Service worker Manifest V3
 ├── popup/
 │   ├── popup.html       # Panneau de configuration
 │   └── popup.js         # Logique popup
@@ -41,6 +45,8 @@ readingcomfortext/
 │   └── OpenDyslexic/    # Police embarquée (SIL-OFL) — fichiers à ajouter
 ├── icons/
 │   └── icon.svg         # Icône de l'extension
+├── tests/
+│   └── extension.spec.js # Tests E2E visuels Playwright
 └── docs/
     ├── science.md       # Références bibliographiques (source)
     └── science.html     # Page affichable depuis le popup
@@ -56,7 +62,14 @@ readingcomfortext/
 # 2. Activer le mode développeur
 # 3. "Charger l'extension non empaquetée" → sélectionner ce dossier
 
-# Validation du manifest (à compléter quand un linter sera ajouté)
+# Tests E2E visuels (Playwright)
+bun install                 # une seule fois
+bunx playwright install chromium
+bun test:e2e                # génère les captures dans test-results/screenshots/
+bun test:e2e:report         # ouvre le rapport HTML
+
+# Validation du manifest
+python3 -m json.tool manifest.json
 ```
 
 ---
@@ -80,6 +93,8 @@ readingcomfortext/
 - **Permissions stores** : le Chrome Web Store demande une privacy policy dès qu'une extension interagit avec les pages web.
 - **TTS et iframes** : la Web Speech API lit le texte depuis le contexte du content script. Le contenu dans les iframes cross-origin n'est pas accessible.
 - **Guide visuel MVP** : la version actuelle utilise un `repeating-linear-gradient` horizontal. Ce n'est pas encore le gradient cosinus caractère par caractère de Korben, mais c'est un premier repère visuel.
+- **Tests Playwright** : pour obtenir l'extension ID, un service worker minimal est nécessaire (`background/background.js`). Sans lui, `context.serviceWorkers()` reste vide.
+- **Taille du popup** : le popup Chrome est limité en hauteur (~600 px). Si le contenu dépasse, une scrollbar verticale apparaît — c'est le comportement attendu.
 
 ---
 

@@ -27,6 +27,9 @@
     "48": "icons/icon.svg",
     "128": "icons/icon.svg"
   },
+  "background": {
+    "service_worker": "background/background.js"
+  },
   "content_scripts": [
     {
       "matches": [
