@@ -34,7 +34,9 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "readingcomfortext@onyxyno.github.io",
-      "data_collection_permissions": ["none"]
+      "data_collection_permissions": {
+        "none": true
+      }
     }
   },
   "content_scripts": [
