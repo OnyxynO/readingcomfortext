@@ -22,3 +22,6 @@ test-results/
 # Assets générés (si on ajoute un build plus tard)
 /dist
 /build
+
+# Captures intermédiaires du store
+store/*-raw.png

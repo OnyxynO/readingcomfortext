@@ -1,23 +1,35 @@
 import { test, expect, chromium } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
+import sharp from 'sharp';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const EXTENSION_PATH = PROJECT_ROOT;
+const STORE_DIR = path.resolve(PROJECT_ROOT, 'store');
 const SCREENSHOTS_DIR = path.resolve(PROJECT_ROOT, 'test-results', 'screenshots');
-
-// Sites représentatifs à tester.
-const TEST_SITES = [
-  { name: 'wikipedia', url: 'https://fr.wikipedia.org/wiki/Dyslexie' },
-  { name: 'mdn', url: 'https://developer.mozilla.org/fr/docs/Web/CSS/letter-spacing' },
-  { name: 'lemonde', url: 'https://www.lemonde.fr/' },
-  { name: 'github-readme', url: 'https://github.com/antijingoist/opendyslexic' },
-];
 
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+
+async function frameToSize(inputPath, outputPath, targetWidth, targetHeight, background = '#f5f5f5') {
+  const { width, height } = await sharp(inputPath).metadata();
+  const scale = Math.min(targetWidth / width, targetHeight / height);
+  const scaledWidth = Math.round(width * scale);
+  const scaledHeight = Math.round(height * scale);
+  const offsetX = Math.round((targetWidth - scaledWidth) / 2);
+  const offsetY = Math.round((targetHeight - scaledHeight) / 2);
+
+  await sharp({
+    create: { width: targetWidth, height: targetHeight, channels: 3, background },
+  })
+    .composite([
+      { input: await sharp(inputPath).resize(scaledWidth, scaledHeight).toBuffer(), left: offsetX, top: offsetY },
+    ])
+    .png()
+    .toFile(outputPath);
 }
 
 async function getExtensionId(context) {
@@ -29,10 +41,6 @@ async function getExtensionId(context) {
   return match[1];
 }
 
-/**
- * Applique les styles ReadingComfortExt directement dans la page.
- * Cette fonction reproduit le comportement de content/content.js pour les tests visuels.
- */
 async function applyReadingComfortStyles(page, settings) {
   await page.evaluate((prefs) => {
     const TEXT_SELECTORS = [
@@ -95,11 +103,12 @@ async function applyReadingComfortStyles(page, settings) {
   }, settings);
 }
 
-test.describe('ReadingComfortExt — tests visuels', () => {
+test.describe('ReadingComfortExt — captures pour le store', () => {
   let context;
   let extensionId;
 
   test.beforeAll(async () => {
+    ensureDir(STORE_DIR);
     ensureDir(SCREENSHOTS_DIR);
     context = await chromium.launchPersistentContext('', {
       headless: false,
@@ -115,45 +124,58 @@ test.describe('ReadingComfortExt — tests visuels', () => {
     await context.close();
   });
 
-  test('popup affiche les options et badges', async () => {
+  test('capture de la popup', async () => {
     const popupPage = await context.newPage();
+    await popupPage.setViewportSize({ width: 420, height: 720 });
     await popupPage.goto(`chrome-extension://${extensionId}/popup/popup.html`);
 
     await expect(popupPage.locator('h1')).toHaveText('ReadingComfortExt');
-    await expect(popupPage.locator('text=Lexend')).toBeVisible();
-    await expect(popupPage.locator('text=Sci ✓').first()).toBeVisible();
-    await expect(popupPage.locator('text=Pref').first()).toBeVisible();
 
-    await popupPage.screenshot({ path: path.join(SCREENSHOTS_DIR, 'popup.png') });
+    const rawPopup = path.join(STORE_DIR, 'screenshot-popup-raw.png');
+    await popupPage.screenshot({ path: rawPopup });
+
+    // Cadre blanc 1000×750 pour respecter les formats de screenshot des stores.
+    await frameToSize(rawPopup, path.join(STORE_DIR, 'screenshot-popup.png'), 1000, 750, '#f8f9fa');
+
     await popupPage.close();
   });
 
-  for (const site of TEST_SITES) {
-    test(`rendu sur ${site.name}`, async () => {
-      const page = await context.newPage();
-      await page.goto(site.url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-      // Laisser un peu de temps au réseau avant la capture, sans attendre networkidle (trop strict sur certains sites).
-      await page.waitForTimeout(2000);
+  test('capture avant/après sur Wikipédia', async () => {
+    const page = await context.newPage();
+    await page.setViewportSize({ width: 1600, height: 1200 });
+    await page.goto('https://fr.wikipedia.org/wiki/Dyslexie', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForTimeout(2000);
 
-      // Capture avant.
-      await page.screenshot({ path: path.join(SCREENSHOTS_DIR, `${site.name}-before.png`) });
-
-      // Appliquer les styles.
-      await applyReadingComfortStyles(page, {
-        enabled: true,
-        font: 'lexend',
-        letterSpacing: 1.5,
-        lineHeight: 1.8,
-        maxWidth: 700,
-        creamBackground: true,
-        noJustify: true,
-        guide: 'colored-lines',
+    // Masquer les éléments parasites pour un rendu propre.
+    await page.evaluate(() => {
+      const selectors = ['.fr-cookie-banner', '.vector-sticky-header', '.centralauth-notice', '#siteNotice', '.vector-page-toolbar'];
+      selectors.forEach((sel) => {
+        const el = document.querySelector(sel);
+        if (el) el.style.display = 'none';
       });
-
-      await page.waitForTimeout(500);
-      await page.screenshot({ path: path.join(SCREENSHOTS_DIR, `${site.name}-after.png`), fullPage: true });
-
-      await page.close();
+      // Descendre légèrement pour avoir le titre + le début du corps de l'article.
+      window.scrollTo(0, 140);
     });
-  }
+
+    const clip = { x: 100, y: 75, width: 1400, height: 1050 };
+
+    await page.screenshot({ path: path.join(STORE_DIR, 'screenshot-wikipedia-before.png'), clip });
+
+    // Appliquer les styles confort.
+    await applyReadingComfortStyles(page, {
+      enabled: true,
+      font: 'lexend',
+      letterSpacing: 1.5,
+      lineHeight: 1.8,
+      maxWidth: 700,
+      creamBackground: true,
+      noJustify: true,
+      guide: 'colored-lines',
+    });
+
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: path.join(STORE_DIR, 'screenshot-wikipedia-after.png'), clip });
+
+    await page.close();
+  });
 });

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReadingComfortExt — Promotional Image</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1400px;
+      height: 560px;
+      background: linear-gradient(135deg, #FDF6E3 0%, #F5F0E1 100%);
+      font-family: 'Lexend', 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .container {
+      width: 1200px;
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .icon {
+      width: 120px;
+      height: 120px;
+      background: #2C3E50;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FDF6E3;
+      font-size: 64px;
+      font-weight: 700;
+      box-shadow: 0 12px 40px rgba(44, 62, 80, 0.18);
+    }
+    .text h1 {
+      font-size: 72px;
+      color: #2C3E50;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .text p {
+      font-size: 32px;
+      color: #5D6D7E;
+      margin-top: 16px;
+      line-height: 1.4;
+    }
+    .badges {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 28px;
+      border-radius: 14px;
+      font-size: 24px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .badge.sci { background: #D4EDDA; color: #155724; }
+    .badge.pref { background: #FFF3CD; color: #856404; }
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+    .badge.sci .dot { background: #28A745; }
+    .badge.pref .dot { background: #F0AD4E; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand">
+      <div class="icon">abc</div>
+      <div class="text">
+        <h1>ReadingComfortExt</h1>
+        <p>Lisez le web dans votre confort.<br>Polices adaptées, espacement, fond crème, TTS.</p>
+      </div>
+    </div>
+    <div class="badges">
+      <div class="badge sci"><span class="dot"></span> Sci ✓ — prouvé scientifiquement</div>
+      <div class="badge pref"><span class="dot"></span> Pref — selon vos préférences</div>
+    </div>
+  </div>
+</body>
+</html>

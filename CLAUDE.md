@@ -49,9 +49,12 @@ readingcomfortext/
 ├── icons/
 │   └── icon.svg           # Icône de l'extension
 ├── scripts/
-│   └── build-zip.sh       # Génère dist/readingcomfortext-firefox.zip
+│   ├── build-zip.sh       # Génère dist/readingcomfortext-firefox.zip
+│   └── render-promo.js    # Génère l'image promotionnelle du store
+├── store/                 # Captures d'écran et image promo pour les stores
 ├── tests/
-│   └── extension.spec.js  # Tests E2E visuels Playwright
+│   ├── extension.spec.js  # Tests E2E visuels Playwright
+│   └── store-screenshots.spec.js  # Génère les captures pour les stores
 └── docs/
     ├── science.md         # Références bibliographiques (source)
     ├── science.html       # Page affichable depuis le popup
@@ -82,6 +85,10 @@ python3 -m json.tool manifest.firefox.json
 # Packaging et validation Firefox
 bun run build:firefox
 npx addons-linter dist/readingcomfortext-firefox.zip
+
+# Générer les captures d'écran et l'image promo pour le store
+bun run store:screenshots
+bun run store:promo
 ```
 
 ---
@@ -128,6 +135,19 @@ npx addons-linter dist/readingcomfortext-firefox.zip
 10. ⏳ Publication Chrome Web Store + Firefox Add-ons (comptes développeur requis)
 
 ---
+
+## Assets pour les stores
+
+Les captures d'écran et l'image promotionnelle sont générées automatiquement dans `store/` :
+
+```bash
+bun run store:screenshots   # store/screenshot-popup.png, store/screenshot-wikipedia-before.png, store/screenshot-wikipedia-after.png
+bun run store:promo         # store/promo-image.png (1400×560)
+```
+
+Formats respectés :
+- Captures d'écran : 1000×750 ou 1400×1050 (recommandé par Firefox Add-ons)
+- Image promotionnelle : 1400×560
 
 ## Publication
 

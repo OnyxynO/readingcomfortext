@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "description": "Extension navigateur open source de confort de lecture pour tout le web.",
   "private": true,
+  "type": "module",
   "scripts": {
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",
-    "build:firefox": "./scripts/build-zip.sh"
+    "build:firefox": "./scripts/build-zip.sh",
+    "store:screenshots": "playwright test tests/store-screenshots.spec.js --reporter=line",
+    "store:promo": "node scripts/render-promo.js"
   },
   "devDependencies": {
-    "@playwright/test": "^1.49.0"
+    "@playwright/test": "^1.49.0",
+    "sharp": "^0.35.3"
   }
 }
