@@ -11,32 +11,20 @@ const GUIDE_ID = 'readingcomfortext-guide';
 const TEXT_SELECTORS = [
   'article', 'main', 'section',
   'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-  'blockquote', 'figcaption', 'td', 'th', 'dt', 'dd', 'label'
+  'blockquote', 'figcaption', 'td', 'th', 'dt', 'dd'
 ].join(', ');
 
-// Valeurs par défaut.
-const DEFAULT_PREFS = {
-  enabled: true,
-  font: 'default',
-  letterSpacing: 0,
-  lineHeight: 1.5,
-  maxWidth: 0,
-  creamBackground: false,
-  noJustify: false,
-  guide: 'none',
-};
-
 /**
- * Récupère les préférences depuis le stockage sync.
+ * Récupère et normalise les préférences depuis le stockage sync.
  * @returns {Promise<object>}
  */
 async function loadPrefs() {
   const stored = await chrome.storage.sync.get(DEFAULT_PREFS);
-  return { ...DEFAULT_PREFS, ...stored };
+  return normalizePrefs({ ...DEFAULT_PREFS, ...stored });
 }
 
 /**
- * Génère la règle @font-face ou charge les polices externes.
+ * Charge les polices externes si elles ne le sont pas déjà.
  */
 function ensureFonts() {
   if (document.getElementById(FONTS_ID)) return;
@@ -116,7 +104,7 @@ function buildCSS(prefs) {
       transition: background-color 0.2s ease, letter-spacing 0.2s ease, line-height 0.2s ease;
     }
 
-    /* Éviter que les titres prennent toute la largeur quand max-width est réduit */
+    /* Les titres ne doivent pas s'étirer artificiellement quand max-width est actif */
     h1, h2, h3, h4, h5, h6 {
       width: fit-content;
     }
@@ -128,6 +116,11 @@ function buildCSS(prefs) {
  * @param {object} prefs
  */
 function applyStyles(prefs) {
+  if (!prefs.enabled) {
+    removeStyles();
+    return;
+  }
+
   ensureFonts();
 
   let styleEl = document.getElementById(STYLE_ID);
@@ -143,6 +136,16 @@ function applyStyles(prefs) {
 }
 
 /**
+ * Supprime les styles et le guide visuel de la page.
+ */
+function removeStyles() {
+  [STYLE_ID, GUIDE_ID].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  });
+}
+
+/**
  * Applique le guide visuel sélectionné.
  * @param {object} prefs
  */
@@ -151,7 +154,6 @@ function applyGuide(prefs) {
 
   if (!prefs.enabled || prefs.guide !== 'colored-lines') {
     if (guideEl) guideEl.remove();
-    document.querySelectorAll('.readingcomfortext-guide-line').forEach((el) => el.remove());
     return;
   }
 
@@ -209,9 +211,14 @@ function stopTTS() {
 /**
  * Réagit aux messages envoyés par le popup.
  */
-chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // Vérifie que le message provient bien de cette extension.
+  if (sender.id && sender.id !== chrome.runtime.id) {
+    return false;
+  }
+
   if (request.action === 'apply') {
-    applyStyles(request.prefs || DEFAULT_PREFS);
+    applyStyles(normalizePrefs(request.prefs || DEFAULT_PREFS));
     sendResponse({ ok: true });
   } else if (request.action === 'tts-play') {
     playTTS();
@@ -225,6 +232,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
 /**
  * Observer les changements du DOM pour les SPA (avec throttle).
+ * Surveille aussi le <head> au cas où une SPA le recrée.
  */
 function observeDOM() {
   let timeout;
@@ -233,10 +241,15 @@ function observeDOM() {
     timeout = setTimeout(async () => {
       const prefs = await loadPrefs();
       applyStyles(prefs);
-    }, 300);
+    }, 500);
   });
 
-  observer.observe(document.body, { childList: true, subtree: true });
+  if (document.body) {
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+  if (document.head) {
+    observer.observe(document.head, { childList: true });
+  }
 }
 
 /**
@@ -246,7 +259,7 @@ async function init() {
   const prefs = await loadPrefs();
   applyStyles(prefs);
 
-  if (document.body) {
+  if (document.body && document.head) {
     observeDOM();
   } else {
     window.addEventListener('DOMContentLoaded', observeDOM);

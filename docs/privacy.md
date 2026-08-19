@@ -25,7 +25,11 @@ Aucune de ces permissions n'est utilisée pour lire le contenu de vos pages à d
 
 ## Services tiers
 
-L'extension n'utilise aucun service externe. Les polices Lexend et Atkinson Hyperlegible sont chargées via Google Fonts lors de l'activation (aucun tracking côté extension). La police OpenDyslexic est embarquée localement dans l'extension.
+La police **OpenDyslexic** est embarquée localement dans l'extension.
+
+Les polices **Lexend** et **Atkinson Hyperlegible** sont chargées depuis **Google Fonts** lorsque vous les sélectionnez. Ce chargement est effectué directement par votre navigateur : l'extension elle-même n'envoie aucune donnée à Google, mais le navigateur peut transmettre l'URL de la page consultée (referer) et votre adresse IP à Google Fonts, comme pour tout chargement de ressource externe. Si vous souhaitez éviter cela, choisissez la police « Police du site (défaut) » ou « OpenDyslexic ».
+
+À part ce chargement de polices, l'extension n'utilise aucun autre service externe et ne collecte aucune donnée.
 
 ## Modifications
 

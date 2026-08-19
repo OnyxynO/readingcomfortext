@@ -3,18 +3,6 @@
  * Charge les préférences, les sauvegarde et les applique à l'onglet actif.
  */
 
-// Valeurs par défaut des préférences.
-const DEFAULT_PREFS = {
-  enabled: true,
-  font: 'default',
-  letterSpacing: 0,
-  lineHeight: 1.5,
-  maxWidth: 0,
-  creamBackground: false,
-  noJustify: false,
-  guide: 'none',
-};
-
 /**
  * Récupère l'onglet actif.
  * @returns {Promise<chrome.tabs.Tab>}
@@ -25,6 +13,31 @@ async function getActiveTab() {
 }
 
 /**
+ * Vérifie si l'onglet permet l'injection de content script.
+ * @param {chrome.tabs.Tab} tab
+ * @returns {boolean}
+ */
+function canInjectIntoTab(tab) {
+  if (!tab?.url) return false;
+  const blocked = ['chrome://', 'edge://', 'about:', 'file://', 'https://chrome.google.com/webstore', 'https://addons.mozilla.org'];
+  return !blocked.some((prefix) => tab.url.startsWith(prefix));
+}
+
+/**
+ * Affiche un message temporaire dans le popup.
+ * @param {string} message
+ * @param {'error' | 'info'} type
+ */
+function showPopupMessage(message, type = 'info') {
+  const banner = document.getElementById('message-banner');
+  if (!banner) return;
+  banner.textContent = message;
+  banner.className = `message-banner ${type}`;
+  banner.classList.remove('hidden');
+  setTimeout(() => banner.classList.add('hidden'), 4000);
+}
+
+/**
  * Envoie un message au content script de l'onglet actif.
  * @param {object} message
  */
@@ -32,9 +45,13 @@ async function sendToContent(message) {
   try {
     const tab = await getActiveTab();
     if (!tab?.id) return;
+    if (!canInjectIntoTab(tab)) {
+      showPopupMessage('Cette page ne permet pas l\'injection de styles (page système, fichier local, etc.).', 'error');
+      return;
+    }
     await chrome.tabs.sendMessage(tab.id, message);
   } catch (error) {
-    // Le content script n'est peut-être pas injecté sur cette page.
+    showPopupMessage('Impossible d\'appliquer les styles sur cette page.', 'error');
     console.warn('[ReadingComfortExt] Impossible de contacter le content script :', error.message);
   }
 }
@@ -45,7 +62,7 @@ async function sendToContent(message) {
  */
 async function loadPrefs() {
   const stored = await chrome.storage.sync.get(DEFAULT_PREFS);
-  return { ...DEFAULT_PREFS, ...stored };
+  return normalizePrefs({ ...DEFAULT_PREFS, ...stored });
 }
 
 /**
@@ -54,8 +71,13 @@ async function loadPrefs() {
  * @param {any} value
  */
 async function savePref(key, value) {
-  await chrome.storage.sync.set({ [key]: value });
-  await sendToContent({ action: 'apply', prefs: await loadPrefs() });
+  try {
+    await chrome.storage.sync.set({ [key]: value });
+    await sendToContent({ action: 'apply', prefs: await loadPrefs() });
+  } catch (error) {
+    showPopupMessage('Erreur de sauvegarde des préférences.', 'error');
+    console.warn('[ReadingComfortExt] Erreur storage :', error.message);
+  }
 }
 
 /**
@@ -63,7 +85,9 @@ async function savePref(key, value) {
  * @param {object} prefs
  */
 function updateUI(prefs) {
-  document.getElementById('enabled').checked = prefs.enabled;
+  const enabledInput = document.getElementById('enabled');
+  enabledInput.checked = prefs.enabled;
+  enabledInput.setAttribute('aria-checked', prefs.enabled ? 'true' : 'false');
 
   const fontInput = document.querySelector(`input[name="font"][value="${prefs.font}"]`);
   if (fontInput) fontInput.checked = true;
@@ -88,7 +112,10 @@ function updateUI(prefs) {
  * Attache les écouteurs d'événements de l'interface.
  */
 function bindEvents() {
-  document.getElementById('enabled').addEventListener('change', (e) => savePref('enabled', e.target.checked));
+  document.getElementById('enabled').addEventListener('change', (e) => {
+    e.target.setAttribute('aria-checked', e.target.checked ? 'true' : 'false');
+    savePref('enabled', e.target.checked);
+  });
 
   document.querySelectorAll('input[name="font"]').forEach((input) => {
     input.addEventListener('change', (e) => savePref('font', e.target.value));
@@ -118,9 +145,14 @@ function bindEvents() {
   });
 
   document.getElementById('reset').addEventListener('click', async () => {
-    await chrome.storage.sync.set(DEFAULT_PREFS);
-    updateUI(DEFAULT_PREFS);
-    await sendToContent({ action: 'apply', prefs: DEFAULT_PREFS });
+    try {
+      await chrome.storage.sync.set(DEFAULT_PREFS);
+      updateUI(DEFAULT_PREFS);
+      await sendToContent({ action: 'apply', prefs: DEFAULT_PREFS });
+    } catch (error) {
+      showPopupMessage('Erreur lors de la réinitialisation.', 'error');
+      console.warn('[ReadingComfortExt] Erreur reset :', error.message);
+    }
   });
 
   document.getElementById('tts-play').addEventListener('click', async () => {

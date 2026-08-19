@@ -220,8 +220,32 @@
       text-align: center;
     }
 
-    .footer a {
+    .footer button {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 11px;
       color: var(--accent);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .message-banner {
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .message-banner.error {
+      background: rgba(192, 57, 43, 0.12);
+      color: #922B21;
+    }
+
+    .message-banner.info {
+      background: rgba(46, 134, 171, 0.12);
+      color: #1A5276;
     }
 
     .hidden {
@@ -232,10 +256,12 @@
 <body>
   <h1>ReadingComfortExt</h1>
 
+  <div id="message-banner" class="message-banner hidden" role="status" aria-live="polite"></div>
+
   <div class="switch-row">
     <label for="enabled">Activer sur ce site</label>
     <label class="toggle">
-      <input type="checkbox" id="enabled" checked>
+      <input type="checkbox" id="enabled" role="switch" aria-checked="true" checked>
       <span class="slider"></span>
     </label>
   </div>
@@ -273,24 +299,24 @@
 
   <h2>Espacement</h2>
   <div class="slider-control">
-    <label>
+    <label for="letter-spacing">
       Espace entre les lettres
-      <span class="slider-value" id="letter-spacing-value">0 px</span>
     </label>
+    <output class="slider-value" id="letter-spacing-value" for="letter-spacing" aria-live="polite">0 px</output>
     <input type="range" id="letter-spacing" min="0" max="6" step="0.5" value="0">
   </div>
   <div class="slider-control">
-    <label>
+    <label for="line-height">
       Hauteur de ligne
-      <span class="slider-value" id="line-height-value">1.5</span>
     </label>
+    <output class="slider-value" id="line-height-value" for="line-height" aria-live="polite">1.5</output>
     <input type="range" id="line-height" min="1" max="2.5" step="0.1" value="1.5">
   </div>
   <div class="slider-control">
-    <label>
+    <label for="max-width">
       Largeur max. du texte
-      <span class="slider-value" id="max-width-value">auto</span>
     </label>
+    <output class="slider-value" id="max-width-value" for="max-width" aria-live="polite">auto</output>
     <input type="range" id="max-width" min="0" max="900" step="50" value="0">
   </div>
 
@@ -337,11 +363,12 @@
     <button id="reset" class="btn-secondary">Réinitialiser</button>
   </div>
 
-  <p class="footer">
-    <a href="#" id="open-science">Pourquoi Sci ✓ / Pref ?</a> ·
-    <a href="#" id="open-privacy">Confidentialité</a>
-  </p>
+  <footer class="footer">
+    <button type="button" id="open-science">Pourquoi Sci ✓ / Pref ?</button> ·
+    <button type="button" id="open-privacy">Confidentialité</button>
+  </footer>
 
+  <script src="../shared/prefs.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

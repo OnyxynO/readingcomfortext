@@ -14,12 +14,12 @@ Extension navigateur open source de confort de lecture pour tout le web — poli
 - **Guide visuel** : lignes colorées
 - **Lecture audio** (TTS) via la Web Speech API native
 - **Badge scientifique** : chaque option indique si elle est **Sci ✓** (soutenue par la recherche) ou **Pref** (préférence subjective)
-- **Zéro service tiers, zéro tracking** : les préférences restent dans votre navigateur
+- **Aucune donnée personnelle collectée** : les préférences restent dans votre navigateur. OpenDyslexic est embarquée localement. Lexend et Atkinson Hyperlegible sont chargées depuis Google Fonts uniquement si vous les choisissez.
 
 ## Stack
 
 - JavaScript vanilla
-- Manifest V3 (Chrome / Edge / Firefox)
+- Manifest V3 (cible : Firefox ; compatible Chrome/Edge en mode développeur)
 - Web Speech API native
 - `chrome.storage.sync` pour la persistance des préférences
 - Polices : Lexend, Atkinson Hyperlegible (Google Fonts), OpenDyslexic (embarquée, SIL-OFL)
@@ -50,30 +50,24 @@ bun test:e2e:report
 
 Les captures d'écran générées se trouvent dans `test-results/screenshots/`.
 
-## Packaging pour les stores
+## Packaging pour Firefox Add-ons
 
 ```bash
-bun run build:zip
+bun run build:firefox
 ```
 
-L'archive `dist/readingcomfortext.zip` est prête à être soumise au Chrome Web Store et à Firefox Add-ons.
+L'archive `dist/readingcomfortext-firefox.zip` est prête à être soumise à Firefox Add-ons. Elle utilise `manifest.firefox.json`, qui ne contient pas `background.service_worker` et retire la permission `scripting` non utilisée.
 
 ## Publication
 
-### Chrome Web Store
+### Firefox Add-ons
 
-1. Créer un compte développeur sur https://chrome.google.com/webstore/devconsole (frais d'inscription : 5 $).
-2. Cliquer sur **"New item"** et uploader `dist/readingcomfortext.zip`.
+1. Se connecter sur https://addons.mozilla.org/developers/.
+2. Soumettre `dist/readingcomfortext-firefox.zip` via le Developer Hub.
 3. Renseigner :
    - Privacy policy : `docs/privacy.html` (ou l'URL hébergée une fois publiée)
    - Description, captures d'écran, icône promotionnelle
 4. Soumettre pour validation.
-
-### Firefox Add-ons
-
-1. Créer un compte sur https://addons.mozilla.org/developers/.
-2. Soumettre `dist/readingcomfortext.zip` via le Developer Hub.
-3. Vérifier que le manifest est compatible (Manifest V3 est supporté par Firefox).
 
 ## Licences
 

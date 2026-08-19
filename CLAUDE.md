@@ -28,28 +28,35 @@ Voir [[INDEX.md]] pour la position dans le workspace.
 
 ```
 readingcomfortext/
-├── manifest.json        # Manifest V3
-├── README.md            # Présentation publique
-├── CLAUDE.md            # Ce fichier
-├── package.json         # Dépendances dev (Playwright)
-├── playwright.config.js # Config tests E2E
+├── manifest.json          # Manifest V3 de dev (Chrome + Firefox)
+├── manifest.firefox.json  # Manifest dédié soumission Firefox Add-ons
+├── README.md              # Présentation publique
+├── CLAUDE.md              # Ce fichier
+├── package.json           # Dépendances dev (Playwright)
+├── playwright.config.js   # Config tests E2E
 ├── .gitignore
 ├── background/
-│   └── background.js    # Service worker Manifest V3
+│   └── background.js      # Service worker / script d'arrière-plan
 ├── popup/
-│   ├── popup.html       # Panneau de configuration
-│   └── popup.js         # Logique popup
+│   ├── popup.html         # Panneau de configuration
+│   └── popup.js           # Logique popup
 ├── content/
-│   └── content.js       # Injection CSS + TTS + MutationObserver
+│   └── content.js         # Injection CSS + TTS + MutationObserver
+├── shared/
+│   └── prefs.js           # Préférences par défaut + validateurs
 ├── fonts/
-│   └── OpenDyslexic/    # Police embarquée (SIL-OFL) — fichiers à ajouter
+│   └── OpenDyslexic/      # Police embarquée (SIL-OFL)
 ├── icons/
-│   └── icon.svg         # Icône de l'extension
+│   └── icon.svg           # Icône de l'extension
+├── scripts/
+│   └── build-zip.sh       # Génère dist/readingcomfortext-firefox.zip
 ├── tests/
-│   └── extension.spec.js # Tests E2E visuels Playwright
+│   └── extension.spec.js  # Tests E2E visuels Playwright
 └── docs/
-    ├── science.md       # Références bibliographiques (source)
-    └── science.html     # Page affichable depuis le popup
+    ├── science.md         # Références bibliographiques (source)
+    ├── science.html       # Page affichable depuis le popup
+    ├── privacy.md         # Politique de confidentialité (source)
+    └── privacy.html       # Page affichable depuis le popup
 ```
 
 ---
@@ -57,8 +64,8 @@ readingcomfortext/
 ## Commandes
 
 ```bash
-# Test local dans Chrome
-# 1. Ouvrir chrome://extensions/
+# Test local dans Chrome/Firefox
+# 1. Ouvrir chrome://extensions/ ou about:debugging
 # 2. Activer le mode développeur
 # 3. "Charger l'extension non empaquetée" → sélectionner ce dossier
 
@@ -70,6 +77,11 @@ bun test:e2e:report         # ouvre le rapport HTML
 
 # Validation du manifest
 python3 -m json.tool manifest.json
+python3 -m json.tool manifest.firefox.json
+
+# Packaging et validation Firefox
+bun run build:firefox
+npx addons-linter dist/readingcomfortext-firefox.zip
 ```
 
 ---
@@ -93,9 +105,12 @@ python3 -m json.tool manifest.json
 - **Permissions stores** : le Chrome Web Store demande une privacy policy dès qu'une extension interagit avec les pages web.
 - **TTS et iframes** : la Web Speech API lit le texte depuis le contexte du content script. Le contenu dans les iframes cross-origin n'est pas accessible.
 - **Guide visuel MVP** : la version actuelle utilise un `repeating-linear-gradient` horizontal. Ce n'est pas encore le gradient cosinus caractère par caractère de Korben, mais c'est un premier repère visuel.
-- **Tests Playwright** : pour obtenir l'extension ID, un service worker minimal est nécessaire (`background/background.js`). Sans lui, `context.serviceWorkers()` reste vide.
-- **Taille du popup** : le popup Chrome est limité en hauteur (~600 px). Si le contenu dépasse, une scrollbar verticale apparaît — c'est le comportement attendu.
-- **Compatibilité Firefox** : Firefox MV3 exige `browser_specific_settings.gecko.id`, `data_collection_permissions` et préfère `background.scripts` au lieu de `service_worker`. Le manifest inclut les propriétés nécessaires.
+- **Tests Playwright** : pour obtenir l'extension ID sous Chromium, un service worker minimal est nécessaire (`background/background.js`). Sans lui, `context.serviceWorkers()` reste vide.
+- **Taille du popup** : le popup est limité en hauteur (~600 px). Si le contenu dépasse, une scrollbar verticale apparaît — c'est le comportement attendu.
+- **Compatibilité Firefox** : Firefox MV3 utilise `background.scripts`, pas `background.service_worker`. Le manifest soumis (`manifest.firefox.json`) est dédié ; le `manifest.json` de dev reste hybride pour les tests Chromium.
+- **Format `data_collection_permissions`** : Firefox Add-ons exige `"required": ["none"]` (tableau) et `strict_min_version: "142.0"` pour le support Android. Vérifier avec `addons-linter`.
+- **Package ZIP Firefox** : l'archive doit contenir les fichiers à la racine, pas dans un sous-dossier. Le script `build-zip.sh` gère cela.
+- **Google Fonts** : Lexend et Atkinson sont chargées depuis `fonts.googleapis.com` uniquement si l'utilisateur les choisit. La privacy policy et le README le mentionnent explicitement.
 
 ---
 
@@ -117,23 +132,19 @@ python3 -m json.tool manifest.json
 ## Publication
 
 ```bash
-# Générer l'archive pour les stores
-bun run build:zip
-# → dist/readingcomfortext.zip
+# Générer l'archive pour Firefox Add-ons
+bun run build:firefox
+# → dist/readingcomfortext-firefox.zip
 ```
-
-### Chrome Web Store
-
-1. Compte développeur : https://chrome.google.com/webstore/devconsole (5 $)
-2. New item → uploader `dist/readingcomfortext.zip`
-3. Privacy policy : `docs/privacy.html` (ou URL hébergée après publication)
-4. Soumettre pour validation.
 
 ### Firefox Add-ons
 
 1. Compte développeur : https://addons.mozilla.org/developers/
-2. Developer Hub → soumettre `dist/readingcomfortext.zip`
-3. Vérifier la compatibilité Manifest V3.
+2. Developer Hub → soumettre `dist/readingcomfortext-firefox.zip`
+3. Privacy policy : `docs/privacy.html` (ou URL hébergée après publication)
+4. Soumettre pour validation.
+
+> Chrome Web Store est volontairement abandonné (frais d'inscription de 5 $).
 
 ## Sources
 
