@@ -63,18 +63,16 @@ async function applyReadingComfortStyles(page, settings) {
     if (prefs.guide === 'colored-lines') {
       guideCSS = `
         ${TEXT_SELECTORS} {
-          background-image: repeating-linear-gradient(
+          background-image: linear-gradient(
             90deg,
-            rgba(231, 76, 60, 0.08) 0px,
-            rgba(231, 76, 60, 0.08) 80px,
-            rgba(52, 152, 219, 0.08) 80px,
-            rgba(52, 152, 219, 0.08) 160px,
-            rgba(46, 204, 113, 0.08) 160px,
-            rgba(46, 204, 113, 0.08) 240px,
-            rgba(155, 89, 182, 0.08) 240px,
-            rgba(155, 89, 182, 0.08) 320px
+            rgba(52, 152, 219, 0.10) 0%,
+            rgba(155, 89, 182, 0.08) 25%,
+            rgba(231, 76, 60, 0.08) 50%,
+            rgba(46, 204, 113, 0.08) 75%,
+            rgba(52, 152, 219, 0.10) 100%
           ) !important;
-          background-size: 320px 100% !important;
+          background-size: 100% ${prefs.lineHeight}em !important;
+          background-repeat: repeat-y !important;
         }
       `;
     }
