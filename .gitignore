@@ -1,0 +1,16 @@
+.DS_Store
+*.log
+.env
+.env.local
+
+# Stores de extensions (packages zippés pour publication)
+*.zip
+
+# Fichiers temporaires d'édition
+*.swp
+*.swo
+*~
+
+# Assets générés (si on ajoute un build plus tard)
+/dist
+/build
