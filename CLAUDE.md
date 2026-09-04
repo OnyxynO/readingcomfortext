@@ -9,8 +9,8 @@
 Extension navigateur (Chrome / Firefox / Edge) qui applique des options de confort de lecture sur n'importe quel site web : polices adaptées, espacement, fond crème, texte non justifié, guides visuels et TTS. Chaque option est badgée **Sci ✓** ou **Pref** pour transparence scientifique.
 
 - **Stack** : JavaScript vanilla + Manifest V3 + Web Speech API + `chrome.storage.sync`
-- **Phase actuelle** : MVP packagé, prêt pour soumission stores
-- **URL prod** : à publier sur Chrome Web Store / Firefox Add-ons
+- **Phase actuelle** : publiée sur Firefox Add-ons (label « Expérimental », v0.1.0)
+- **URL prod** : https://addons.mozilla.org/fr/firefox/addon/readingcomfortext/
 - **Repo** : `OnyxynO/readingcomfortext` (public)
 
 Voir [[INDEX.md]] pour la position dans le workspace.
@@ -21,6 +21,7 @@ Voir [[INDEX.md]] pour la position dans le workspace.
 
 - 2026-08-19 : intégration workspace (skill `/ouroboros-integration`) depuis `_ideas/ReadingComfortExt/`
 - 2026-08-19 : MVP — popup, content script, stockage sync, badges Sci ✓ / Pref, TTS et guide visuel
+- 2026-08-19 : publication sur Firefox Add-ons (v0.1.0, label « Expérimental »)
 
 ---
 
@@ -132,7 +133,7 @@ bun run store:promo
 7. ✅ Tests sur un panel de sites représentatifs (Playwright)
 8. ✅ Embarquer OpenDyslexic en local (supprimer le CDN jsDelivr)
 9. ✅ Ajouter une privacy policy pour les stores
-10. ⏳ Publication Chrome Web Store + Firefox Add-ons (comptes développeur requis)
+10. ✅ Publication Firefox Add-ons (Chrome Web Store abandonné, frais d'inscription 5 $)
 
 ---
 

@@ -2,8 +2,7 @@
 
 Extension navigateur open source de confort de lecture pour tout le web — polices adaptées, espacement, fond crème, TTS et badge scientifique.
 
-🔗 **Chrome Web Store** : *en cours de soumission*  
-🔗 **Firefox Add-ons** : *en cours de soumission*  
+🔗 **Firefox Add-ons** : https://addons.mozilla.org/fr/firefox/addon/readingcomfortext/  
 🐙 **Code source** : https://github.com/OnyxynO/readingcomfortext
 
 ## Fonctionnalités
