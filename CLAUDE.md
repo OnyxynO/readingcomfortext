@@ -134,6 +134,8 @@ bun run store:promo
 8. ✅ Embarquer OpenDyslexic en local (supprimer le CDN jsDelivr)
 9. ✅ Ajouter une privacy policy pour les stores
 10. ✅ Publication Firefox Add-ons (Chrome Web Store abandonné, frais d'inscription 5 $)
+11. ✅ Résumé + description longue AMO (`docs/store-description.md`), collés sur la fiche
+12. ⏳ Upload des captures d'écran / image promo sur la fiche AMO (assets déjà générés dans `store/`, à faire plus tard)
 
 ---
 
